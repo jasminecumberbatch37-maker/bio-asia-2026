@@ -468,7 +468,7 @@ document.getElementById('vendorList').innerHTML = vendors.map(k=>`
   <div class="kcard ${k.priority} ${k.bg||''}">
     <div class="kname">${k.name}<span class="kbooth">${k.booth}</span><span class="ktag ${k.tagclass}">${k.tag}</span></div>
     <div class="kdetail">${k.detail}</div>
-    <div class="kaction">已採取動作 ➜ ${k.action}</div>
+    <div class="kaction">${k.bg ? '已採取動作 ➜' : '➜'} ${k.action}</div>
   </div>`).join('');
 
 function switchTab(id){
