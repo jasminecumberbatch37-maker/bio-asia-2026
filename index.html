@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>BIO Asia-Taiwan 2026 ｜ 展商追蹤板</title>
+<style>
+  :root{
+    --navy:#132A46;
+    --navy-deep:#0B1C30;
+    --teal:#0F8A82;
+    --teal-soft:#E4F4F2;
+    --amber:#D98E2C;
+    --amber-soft:#FBF0DE;
+    --red:#C24141;
+    --red-soft:#FBEAEA;
+    --green:#2E8B57;
+    --green-soft:#E9F6EE;
+    --paper:#F6F5F1;
+    --card:#FFFFFF;
+    --ink:#1F2937;
+    --ink-soft:#6B7280;
+    --line:#E5E2DA;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 20px 80px;}
+
+  header.top{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);
+    color:#fff;
+    border-radius:16px;
+    padding:28px 30px;
+    margin-bottom:16px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute; right:-40px; top:-40px;
+    width:180px;height:180px;border-radius:50%;
+    background:rgba(15,138,130,0.35);
+  }
+  header.top h1{margin:0 0 6px;font-size:22px;letter-spacing:0.5px;position:relative;}
+  header.top p{margin:0;color:#B9C6D6;font-size:13px;position:relative;}
+  .meta-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;position:relative;}
+  .meta-pill{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:10px;padding:8px 14px;font-size:13px;
+    cursor:pointer;
+    transition:all .15s ease;
+    text-align:left;
+  }
+  .meta-pill:hover{background:rgba(15,138,130,0.35);border-color:var(--teal);transform:translateY(-1px);}
+  .meta-pill b{font-size:17px;display:block;color:#fff;}
+  .meta-pill span{color:#9FB0C3;}
+
+  .conclusion-box{
+    background:var(--card);
+    border:1.5px solid var(--teal);
+    border-radius:14px;
+    padding:18px 22px;
+    margin-bottom:20px;
+  }
+  .conclusion-box h3{
+    margin:0 0 10px;font-size:14px;color:var(--teal);
+    display:flex;align-items:center;gap:6px;
+  }
+  .conclusion-box ol{margin:0;padding-left:20px;font-size:13px;color:var(--ink);}
+  .conclusion-box li{margin-bottom:7px;}
+  .conclusion-box li b{color:var(--navy);}
+
+  nav.tabs{
+    display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;
+    position:sticky; top:10px; z-index:20;
+    background:var(--paper);
+    padding:8px 0;
+  }
+  .tab-btn{
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    padding:9px 16px;
+    border-radius:999px;
+    font-size:13px;
+    cursor:pointer;
+    font-weight:600;
+    transition:all .15s ease;
+  }
+  .tab-btn:hover{border-color:var(--teal);color:var(--teal);}
+  .tab-btn.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+  section.panel{display:none;}
+  section.panel.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  h2.sec-title{font-size:16px;margin:4px 0 4px;color:var(--navy);}
+  p.sec-sub{margin:0 0 16px;font-size:12.5px;color:var(--ink-soft);}
+
+  .stat-row{display:flex;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+  .stat-card{
+    flex:1;min-width:140px;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;
+  }
+  .stat-card .num{font-size:28px;font-weight:800;color:var(--navy);line-height:1.1;}
+  .stat-card .lbl{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+  .stat-card.hi .num{color:var(--teal);}
+  .note-strip{
+    background:var(--amber-soft);color:#8A5A12;border-radius:10px;
+    padding:10px 14px;font-size:12.5px;margin-bottom:16px;
+  }
+
+  .toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .search-box{
+    flex:1;min-width:180px;
+    border:1px solid var(--line);border-radius:10px;
+    padding:9px 14px;font-size:13.5px;background:var(--card);
+  }
+  select.filter-select{
+    border:1px solid var(--line);border-radius:10px;
+    padding:9px 12px;font-size:13.5px;background:var(--card);color:var(--ink);
+  }
+  .count-badge{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .exhibitor-list{display:flex;flex-direction:column;gap:8px;}
+  .ex-row{
+    display:grid;grid-template-columns:1fr 90px 150px;
+    gap:10px;align-items:center;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:10px 14px;font-size:13px;
+  }
+  .ex-row.no-match{opacity:0.6;}
+  .ex-row .zh{font-weight:700;color:var(--navy);}
+  .ex-row .en{color:var(--ink-soft);font-size:11.5px;}
+  .ex-row .booth{
+    background:var(--teal-soft);color:var(--teal);
+    text-align:center;border-radius:6px;padding:5px 0;font-weight:700;font-size:12px;
+  }
+  .match-flag{
+    font-size:11.5px;font-weight:700;text-align:center;border-radius:999px;padding:5px 10px;
+  }
+  .match-flag.yes{background:var(--green-soft);color:var(--green);}
+  .match-flag.no{background:var(--red-soft);color:var(--red);}
+  .match-flag.warn{background:var(--amber-soft);color:var(--amber);}
+  @media (max-width:680px){
+    .ex-row{grid-template-columns:1fr;gap:6px;}
+    .match-flag,.booth{justify-self:start;width:fit-content;}
+  }
+
+  .task-card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;
+  }
+  .check{
+    width:22px;height:22px;border-radius:6px;flex-shrink:0;margin-top:2px;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+  }
+  .check.done{background:var(--green);color:#fff;}
+  .check.pending{background:#EFEFEF;color:transparent;border:1px solid var(--line);}
+  .task-body{flex:1;}
+  .task-title{font-weight:700;font-size:14px;color:var(--navy);}
+  .task-detail{font-size:12.5px;color:var(--ink-soft);margin-top:3px;}
+  .task-status{
+    font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;
+    background:var(--green-soft);color:var(--green);white-space:nowrap;
+  }
+
+  .status-grid{display:flex;flex-direction:column;gap:10px;}
+  .status-card{
+    border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:var(--card);
+    display:grid;grid-template-columns:24px 1fr 220px;gap:12px;align-items:center;
+  }
+  .dot{width:12px;height:12px;border-radius:50%;}
+  .dot.green{background:var(--green);} .dot.amber{background:var(--amber);} .dot.red{background:var(--red);}
+  .status-card .name{font-weight:700;color:var(--navy);font-size:13.5px;}
+  .status-card .sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .status-flag{
+    font-size:12px;font-weight:700;text-align:center;border-radius:999px;padding:6px 10px;
+  }
+  .status-flag.green{background:var(--green-soft);color:var(--green);}
+  .status-flag.amber{background:var(--amber-soft);color:var(--amber);}
+  .status-flag.red{background:var(--red-soft);color:var(--red);}
+  @media (max-width:680px){
+    .status-card{grid-template-columns:16px 1fr;}
+    .status-flag{grid-column:2;justify-self:start;margin-top:6px;}
+  }
+
+  .region-banner{
+    background:var(--teal-soft);color:var(--teal);border-radius:10px;
+    padding:10px 14px;font-size:12.5px;font-weight:700;margin-bottom:16px;
+  }
+  .kcard{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:12px;border-left:4px solid var(--teal);
+  }
+  .kcard.priority-high{border-left-color:var(--red);}
+  .kcard.priority-mid{border-left-color:var(--amber);}
+  .kcard.priority-good{border-left-color:var(--green);}
+  .kcard .kname{font-weight:700;color:var(--navy);font-size:14.5px;}
+  .kcard .kbooth{font-size:11px;color:#fff;background:var(--teal);border-radius:6px;padding:2px 8px;margin-left:6px;}
+  .kcard .ktag{font-size:11px;color:#fff;border-radius:6px;padding:2px 8px;margin-left:6px;}
+  .kcard .ktag.tag-good{background:var(--green);}
+  .kcard .ktag.tag-mid{background:var(--amber);}
+  .kcard .ktag.tag-new{background:var(--red);}
+  .kcard .kdetail{font-size:12.5px;color:var(--ink-soft);margin-top:7px;}
+  .kcard .kaction{font-size:12.5px;color:var(--ink);margin-top:8px;background:var(--paper);border-radius:8px;padding:9px 11px;}
+  .strategy-box{
+    background:var(--navy);color:#fff;border-radius:12px;padding:16px 18px;margin-top:18px;
+    font-size:13px;
+  }
+  .strategy-box b{color:var(--teal-soft);display:block;margin-bottom:6px;font-size:13px;}
+
+  footer{margin-top:30px;text-align:center;font-size:11px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>BIO Asia-Taiwan 2026 ｜ 展商追蹤板</h1>
+    <p>南港一館 4F / 1F ｜ 2026/07/16（四）–07/19（日）</p>
+    <div class="meta-row">
+      <div class="meta-pill" data-jump="t1"><b>73</b><span>展昭名單 × 官網對照</span></div>
+      <div class="meta-pill" data-jump="t2"><b>7</b><span>已拿到貨</span></div>
+      <div class="meta-pill" data-jump="t3"><b>6</b><span>2025 舊案件追蹤</span></div>
+      <div class="meta-pill" data-jump="t4"><b>4</b><span>L區重點大廠</span></div>
+    </div>
+  </header>
+
+  <div class="conclusion-box">
+    <h3>📌 CONCLUSION 重點結論</h3>
+    <ol>
+      <li><b>回頭率約五成：</b>展昭給的73家海外廠商名單中，官網確認今年實際參展約37家（詳細數字見①分頁），代表海外廠商回頭率約五成；未回來的廠商多屬美容保養／保健食品類，研判是隨同期的「亞洲美容保養·生技保健大展」另外招商，而非真的退出市場。</li>
+      <li><b>貨量集中在少數大廠：</b>大部分參展廠商是標準攤位，僅帶型錄彩頁、拉行李箱來台，沒有貨運需求；真正需要進口設備、有貨運服務空間的廠商集中在 L 區製藥＆包裝設備、CDMO/CRO 幾家大廠。</li>
+      <li><b>L區是主力戰場：</b>博斯特、樂嘉文為穩定往來且關係良好的大廠，兩家都須持續維持；楚天科技關係降溫中，但目前一般貨報價空間大，值得改變聯繫方式主動出擊。</li>
+      <li><b>2025案件流向已釐清：</b>Enclony（博斯特旗下品牌）今年未參展；Fette（同為博斯特旗下品牌）今年有參展；Rieckermann獨立參展；SONOMA、Moon Pharma則是2025配合過但2026未參展。</li>
+      <li><b>下一步：</b>維持博斯特、樂嘉文關係；楚天改走名單聯絡人＋十元／檸檬直接搶單；悅廷和持續透過韓國EXPOTRANS＋KEMI-LEE雙軌並進開發。</li>
+    </ol>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="t1">① 展昭名單 × 官網對照</button>
+    <button class="tab-btn" data-tab="t2">② 已拿到貨</button>
+    <button class="tab-btn" data-tab="t3">③ 2025 → 2026 對照</button>
+    <button class="tab-btn" data-tab="t4">④ L區重點大廠</button>
+  </nav>
+
+  <section class="panel active" id="t1">
+    <h2 class="sec-title">展昭給的海外廠商名單 × 官網實際參展名單 比較</h2>
+    <div class="stat-row">
+      <div class="stat-card"><div class="num" id="statTotal">－</div><div class="lbl">展昭名單總家數</div></div>
+      <div class="stat-card hi"><div class="num" id="statYes">－</div><div class="lbl">官網確認今年參展</div></div>
+      <div class="stat-card"><div class="num" id="statNo">－</div><div class="lbl">官網查無（未回來）</div></div>
+      <div class="stat-card"><div class="num" id="statRate">－</div><div class="lbl">回頭參展率</div></div>
+    </div>
+    <div class="note-strip">💼 大部分廠商為標準攤位，僅帶型錄彩頁、拉行李箱來台，沒有進口貨運需求；真正的貨運服務對象集中在少數設備型大廠。</div>
+    <p class="sec-sub">搜尋框可查公司名稱，右側可篩選「官網有／官網無」</p>
+    <div class="toolbar">
+      <input class="search-box" id="searchBox" placeholder="搜尋公司名稱 / 攤位號…">
+      <select class="filter-select" id="statusFilter">
+        <option value="">全部狀態</option>
+        <option value="yes">✅ 官網有</option>
+        <option value="no">❌ 官網無</option>
+      </select>
+    </div>
+    <div class="count-badge" id="countBadge"></div>
+    <div class="exhibitor-list" id="exList"></div>
+  </section>
+
+  <section class="panel" id="t2">
+    <h2 class="sec-title">已拿到貨的廠商</h2>
+    <p class="sec-sub">資料來源：BIO ASIA 貨況表</p>
+    <div id="cargoList"></div>
+  </section>
+
+  <section class="panel" id="t3">
+    <h2 class="sec-title">2025 案件廠商 → 2026 是否有參展</h2>
+    <p class="sec-sub">已逐一核對官網資料，明確標示「有」或「沒有」</p>
+    <div class="status-grid" id="statusList"></div>
+  </section>
+
+  <section class="panel" id="t4">
+    <h2 class="sec-title">L區重點大廠現況與後續行動</h2>
+    <div class="region-banner">📍 貨量集中在 L 區製藥＆包裝設備廠商</div>
+    <div id="vendorList"></div>
+    <div class="strategy-box">
+      <b>後續 STRATEGY</b>
+      直接聯繫直客；若廠商需要一整天服務，改由「十元」或「檸檬」去搶下窗口。
+    </div>
+  </section>
+
+  <footer>整理日期：2026/07/16 ｜ 資料來源：展昭海外參展商名單、官網攤位資料、BIO ASIA貨況表、2025案件系統</footer>
+</div>
+
+<script>
+const chenzhao = [
+ ["聯生智科（上海）醫藥科技有限公司","BIOMED LINKAGE TECH CO., LTD.","M1105","yes"],
+ ["HAOYUAN CHEMEXPRESS CO., LIMITED","(醫藥醫材區)","－","no"],
+ ["ALMAC GROUP","","L630","yes"],
+ ["TOYO MACHINE MANUFACTURING CO.,LTD.","株式會社東陽機械製作所","L402","yes"],
+ ["ROMMELAG SWITZERLAND AG","","L425","yes"],
+ ["楚天科技股份有限公司","TRUKING TECHNOLOGY LIMITED","L408","yes"],
+ ["ORIENTAL YEAST CO., LTD.","(CELL THERAPY)","－","no"],
+ ["深圳康體生物醫藥科技有限公司","SHENZHEN KANGTI BIOPHARM TECHNOLOGY","M1211","yes"],
+ ["CRSCUBE INC.","","L428","yes"],
+ ["上海森松製藥設備工程有限公司","SHANGHAI MORIMATSU","L528","yes"],
+ ["上海睿智醫藥研究集團有限公司","SHANGHAI CHEMPARTNER","M1123","yes"],
+ ["賀維斯特國際醫藥有限公司","HARVEST (HIRO)","L328","yes"],
+ ["奧星設備有限公司","AUSTAR EQUIPMENT LIMITED","L1017","yes"],
+ ["杭州科百特過濾器材有限公司","HANGZHOU COBETTER","L532","yes"],
+ ["TWIST BIOSCIENCE","(生技服務區)","N1106","yes"],
+ ["ADVANCED CTS CORP.(ACTS)","","M607","yes"],
+ ["CELLSAFE","","M605","yes"],
+ ["亞洲再生醫療(香港)有限公司","HONG KONG LIFE SCIENCE CONSULTANT","L621","yes"],
+ ["利穗科技(蘇州)有限公司","LISURE SCIENCE","M506","yes"],
+ ["SFS PHARMA LOGISTICS PTE LTD.","祥祐全球物流","L627","yes"],
+ ["北京若生智能科技有限公司","BEIJING NOAH AI TECHNOLOGY","－","no"],
+ ["蘇州蘇磁智能科技有限公司","SUZHOU SUPERMAG","L324","yes"],
+ ["美天旎生物技術公司","MILTENYI BIOTEC","L518","yes"],
+ ["煙台邁百瑞國際生物醫藥股份有限公司","MABPLEX INTERNATIONAL","M225","yes"],
+ ["凱萊英醫藥集團（天津）股份有限公司","ASYMCHEM LABORATORIES","M508","yes"],
+ ["TOSOH ASIA PTE. LTD.","TOSOH BIOSCIENCE","M408","yes"],
+ ["常州普瑞流體技術有限公司","CHANGZHOU PREFLUID","L526","yes"],
+ ["上海美迪西生物醫藥股份有限公司","SHANGHAI MEDICILON","M1124","yes"],
+ ["上海有臨醫藥科技公司","SHANGHAI UNIONCLIN","M1106","yes"],
+ ["PAEONIA IINOVATIONS","官網正確拼法為INNOVATIONS","L326","yes"],
+ ["麥肯國際物流有限公司","MARKEN TAIWAN LTD.","N1107","yes"],
+ ["上海優可賽生物科技有限公司","SHANGHAI NUCLEOSIDES","L524","yes"],
+ ["KAJIMA CORPORATION","","L527","yes"],
+ ["星德科包裝技術(杭州)有限公司","SYNTEGON","L427","yes"],
+ ["TERUMO BCT ASIA PTE. LTD.","歐美嘉股份有限公司","L631","yes"],
+ ["OPIS S.R.L.","","L522","yes"],
+ ["藝達思貿易(上海)有限公司","IDEX TRADING","L423","yes"],
+ ["浙江魯墨科學儀器有限公司","LOLMO INSTRUMENT","L525","yes"],
+ ["深圳易順萬康生物科技有限公司","／深圳市易啟順康酒店管理","－","no"],
+ ["廣州市廣膜化妝品有限公司","GO MO COSMETIC FACTORY","－","no"],
+ ["MIROKU CO., LTD.","圓安生技股份有限公司","－","no"],
+ ["DSMEDI, INC.","","－","no"],
+ ["BOTANIC HEALTHCARE PVT. LTD.","印度","J224","yes"],
+ ["北京東方創盈國際展覽有限公司","","－","no"],
+ ["西安威勝生物技術有限公司","(北京東方創盈)","－","no"],
+ ["河南豫鑫糖醇有限公司","(北京東方創盈)","－","no"],
+ ["杭州天草科技有限公司","(北京東方創盈)","－","no"],
+ ["鶴壁市方瑞化工產品有限公司","(北京東方創盈)","－","no"],
+ ["湖南朗林生物資源股份有限公司","","－","no"],
+ ["湖南德諾健康產業集團有限公司","(去展網)","－","no"],
+ ["恒達機械(天津)有限公司","","－","no"],
+ ["SABINSA KOREA CORPORATION","","－","no"],
+ ["成都博洪生物科技有限公司","","－","no"],
+ ["陝西宏達天源生物化工有限公司","JHD CORP","－","no"],
+ ["CELL BY CELL CO., LTD.","","－","no"],
+ ["DOWELL & YIDAI COSMETICS FRANCE SAS","上海全麗生物科技","－","no"],
+ ["NUTRITECH JAPAN","","－","no"],
+ ["ES","","－","no"],
+ ["恩之燕","INFITOS SDN BHD (SIMFONI)","－","no"],
+ ["CUSTOM FOOD INGREDIENTS SDN BHD","","－","no"],
+ ["廣州亞特塑料有限公司","","－","no"],
+ ["日本伴照株式會社","","－","no"],
+ ["KOREA DERMATOLOGY RESEARCH INSTITUTE","KDRI","－","no"],
+ ["上海海順醫用新材料有限公司","","－","no"],
+ ["DERMATEST KOREA LTD.","","－","no"],
+ ["UMALAXMI ORGANICS PVT. LTD.","","－","no"],
+ ["DERMA FLAWLESS","","－","no"],
+ ["桂林市顏汝妮生物工程有限公司","","－","no"],
+ ["南京開樂地環保科技有限公司","CAREDDI TECHNOLOGY","－","no"],
+ ["廣州雅南無紡布製品有限公司","","－","no"],
+ ["STURGEONBIO CO., LTD.","(IBITA)","－","no"],
+ ["ICE LINKER CO., LTD.","","－","no"],
+ ["KOECO CO., LTD.","","－","no"],
+];
+
+const exList = document.getElementById('exList');
+const searchBox = document.getElementById('searchBox');
+const statusFilter = document.getElementById('statusFilter');
+const countBadge = document.getElementById('countBadge');
+
+const totalCount = chenzhao.length;
+const yesCount = chenzhao.filter(e=>e[3]==='yes').length;
+const noCount = chenzhao.filter(e=>e[3]==='no').length;
+document.getElementById('statTotal').textContent = totalCount;
+document.getElementById('statYes').textContent = yesCount;
+document.getElementById('statNo').textContent = noCount;
+document.getElementById('statRate').textContent = Math.round(yesCount/totalCount*100)+'%';
+
+function flagHtml(s){
+  if(s==='yes') return `<div class="match-flag yes">✅ 官網有</div>`;
+  if(s==='warn') return `<div class="match-flag warn">⚠️ 名稱疑似變更</div>`;
+  return `<div class="match-flag no">❌ 官網無</div>`;
+}
+
+function renderExhibitors(){
+  const q = searchBox.value.trim().toLowerCase();
+  const st = statusFilter.value;
+  const filtered = chenzhao.filter(e=>{
+    const matchQ = !q || e[0].toLowerCase().includes(q) || e[1].toLowerCase().includes(q) || e[2].toLowerCase().includes(q);
+    const matchS = !st || e[3]===st;
+    return matchQ && matchS;
+  });
+  countBadge.textContent = `目前顯示 ${filtered.length} / ${totalCount} 家`;
+  exList.innerHTML = filtered.map(e=>`
+    <div class="ex-row ${e[3]==='no'?'no-match':''}">
+      <div><div class="zh">${e[0]}</div><div class="en">${e[1]}</div></div>
+      <div class="booth">${e[2]}</div>
+      ${flagHtml(e[3])}
+    </div>`).join('');
+}
+searchBox.addEventListener('input',renderExhibitors);
+statusFilter.addEventListener('change',renderExhibitors);
+renderExhibitors();
+
+const cargo = [
+ ["博斯特Booster-Groninger","L508","Carnet","貨存南一","1木箱 80x60x33cm/84kg",true],
+ ["博斯特Booster-FETTE","L508","保稅","保稅倉庫","3木箱 合計約2573kg",true],
+ ["蘇州蘇磁科技","L324","快遞","貨存南一+辦公室","11件",true],
+ ["SHINVA MEDICAL 奇恩 山東新華","L602","押款","貨存南一","2件 合計約750kg",true],
+ ["Kohan 科安－Leistriz","L602","押款","貨存南一","1件 194x112x156cm/604kg",true],
+ ["江蘇集萃","M410","快遞","南一倉庫","1CTN",false],
+ ["BOTANIC HEALTHCARE 印度","J224","繳稅","南一辦公室","7件 約100kg",false],
+];
+document.getElementById('cargoList').innerHTML = cargo.map(c=>`
+  <div class="task-card">
+    <div class="check ${c[5]?'done':'pending'}">${c[5]?'✓':''}</div>
+    <div class="task-body">
+      <div class="task-title">${c[0]} <span style="font-weight:400;color:var(--ink-soft);font-size:12px;">｜ 攤位 ${c[1]}</span></div>
+      <div class="task-detail">進口方式：${c[2]}　｜　貨況：${c[3]}　｜　${c[4]}</div>
+    </div>
+    <div class="task-status" style="${c[5]?'':'background:#EFEFEF;color:#8a8a8a;'}">${c[5]?'已退場':'進行中'}</div>
+  </div>`).join('');
+
+const statusData = [
+ ["Rieckermann","2025 REF：全球國際貨運代理（中國）有限公司　｜　獨立參展廠商","有　－　攤位 L306","green"],
+ ["Fette（空運＋海運）","2025 REF：菲特（中國）製藥科技有限公司　｜　博斯特Booster Autotech旗下品牌","有　－　隨博斯特（L508）攤位參展","green"],
+ ["Enclony","2025 REF：KEMI-LEE CO., LTD.　｜　博斯特Booster Autotech旗下品牌","沒有　－　今年未參展","red"],
+ ["SONOMA","2025 REF：EIGHT EVENT FREIGHT B.V.","沒有－2026未參展","red"],
+ ["Moon Pharma","2025 REF：深圳市优泰物流有限公司","沒有－2026未參展","red"],
+];
+document.getElementById('statusList').innerHTML = statusData.map(s=>`
+  <div class="status-card">
+    <div class="dot ${s[3]}"></div>
+    <div><div class="name">${s[0]}</div><div class="sub">${s[1]}</div></div>
+    <div class="status-flag ${s[3]}">${s[2]}</div>
+  </div>`).join('');
+
+const vendors = [
+ {name:"博斯特 Booster Autotech",booth:"L508",priority:"priority-good",tag:"維持關係",tagclass:"tag-good",
+  detail:"L區設備代理商，目前貨量最大（Enclony、Groninger、FETTE三品牌，合計約2573+520+84kg）",
+  action:"關係穩定，喜歡／滿意我們的服務，會一路推薦我們"},
+ {name:"樂嘉文／日本Nikka",booth:"L306",priority:"priority-good",tag:"維持關係",tagclass:"tag-good",
+  detail:"L區設備廠商，20GP貨櫃，Carnet報關。大陸窗口 LILY 與 JASON 關係良好",
+  action:"明年確定：DSV / SCHENKER組織架構有變，SCHENKER不需要再受DSV威脅強制給貨，明年會直接給我們"},
+ {name:"楚天科技 TRUKING",booth:"L408",priority:"priority-mid",tag:"改變策略",tagclass:"tag-mid",
+  detail:"L區設備廠商，與UTEK共用大攤位（官網登記4單位R.S.空地攤位）。曾做過展品貨，目前多為一般貨，報價預估可以有很大空間",
+  action:"已在攤位打過招呼，目前比較不熱絡，會改聯繫名單上聯絡人，並由十元或檸檬直接去搶"},
+ {name:"悅廷和",booth:"待確認攤位",priority:"priority-high",tag:"新開發",tagclass:"tag-new",
+  detail:"透過韓國代理 EXPOTRANS 進來",
+  action:"已寫信表達合作善意；若無回應，將直接聯繫廠商，並提供 KEMI-LEE 聯繫資料"},
+];
+document.getElementById('vendorList').innerHTML = vendors.map(k=>`
+  <div class="kcard ${k.priority}">
+    <div class="kname">${k.name}<span class="kbooth">${k.booth}</span><span class="ktag ${k.tagclass}">${k.tag}</span></div>
+    <div class="kdetail">${k.detail}</div>
+    <div class="kaction">➜ ${k.action}</div>
+  </div>`).join('');
+
+function switchTab(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id===id));
+  document.querySelector('nav.tabs').scrollIntoView({behavior:'smooth', block:'start'});
+}
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>switchTab(btn.dataset.tab));
+});
+document.querySelectorAll('.meta-pill').forEach(pill=>{
+  pill.addEventListener('click',()=>switchTab(pill.dataset.jump));
+});
+</script>
+</body>
+</html>
